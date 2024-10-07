@@ -41,13 +41,11 @@
             font-size: 20px;
             height: 80px;
             width: 150px;
+            display: inline-table;
             border-radius: 10px;
             background: linear-gradient(to right bottom, rgb(240, 240, 240), rgb(221, 221, 221));
             margin: 10px;
             text-align: center;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
             user-select: none;
         }
 
@@ -268,8 +266,8 @@
                             <tr class="orderBorder">
                                 <td class="orderBorder" style="width: 28px;"></td>
                                 <td class="orderBorder">Name</td>
-                                <td class="orderBorder" style="width: 100px;">Category</td>
-                                <td class="orderBorder" style="width: 100px;">Price(RM)</td>
+                                <td class="orderBorder" style="width: 90px;">Category</td>
+                                <td class="orderBorder" style="width: 80px;">Price(RM)</td>
                                 <td class="orderBorder" style="width: 20px;"></td>
                             <tr>
                         </table>
@@ -303,8 +301,8 @@
                         <tr class="orderBorder">
                             <td class="orderBorder" style="width: 28px;"></td>
                             <td class="orderBorder">Name</td>
-                            <td class="orderBorder" style="width: 100px;">Category</td>
-                            <td class="orderBorder" style="width: 100px;">Price(RM)</td>
+                            <td class="orderBorder" style="width: 90px;">Category</td>
+                            <td class="orderBorder" style="width: 80px;">Price(RM)</td>
                         <tr>
                     </table>
                     <div id="addOrder" class="orderButton" onclick="addOrder('${name}', ${price}, '${category}')">
@@ -382,8 +380,8 @@
                 <tr class="orderBorder">
                     <td class="orderBorder" style="width: 28px;"></td>
                     <td class="orderBorder">Name</td>
-                    <td class="orderBorder" style="width: 100px;">Category</td>
-                    <td class="orderBorder" style="width: 100px;">Price(RM)</td>
+                    <td class="orderBorder" style="width: 90px;">Category</td>
+                    <td class="orderBorder" style="width: 80px;">Price(RM)</td>
                     <td class="orderBorder" style="width: 20px;"></td>
                 <tr>
             </table>
@@ -518,16 +516,16 @@
                 //Left and Right arrow
                 document.getElementById("categoryList").innerHTML += `
                     <div class="category">
-                        <div id="right_${categorySnapshot.key}" style="display: none; position: absolute; right: 30px; padding: 20px 2px 20px 2px; transform: translate(0%, 78%);" onclick="document.getElementById('itemList_' + '${categorySnapshot.key}').scrollBy(170, 0);">
+                        <div id="right_${categorySnapshot.key}" style="z-index: 1; display: none; border: 1px solid black; border-radius: 5px; background-color: white; position: absolute; right: 30px; padding: 20px 10px 20px 2px; transform: translate(0%, 78%);" onclick="document.getElementById('itemList_' + '${categorySnapshot.key}').scrollBy(170, 0);">
                             <div style="border-style: solid solid none none; height: 15px; width: 15px; border-width: 2px; transform: rotate(45deg);">
                             </div>
                         </div>
-                        <div id="left_${categorySnapshot.key}" style="display: none; position: absolute; left: 30px; padding: 20px 2px 20px 2px; transform: translate(0%, 78%);" onclick="document.getElementById('itemList_' + '${categorySnapshot.key}').scrollBy(-170, 0);">
+                        <div id="left_${categorySnapshot.key}" style="z-index: 1; border: 1px solid black; border-radius: 5px; background-color: white; display: none; position: absolute; left: 30px; padding: 20px 2px 20px 10px; transform: translate(0%, 78%);" onclick="document.getElementById('itemList_' + '${categorySnapshot.key}').scrollBy(-170, 0);">
                             <div style="border-style: solid solid none none; height: 15px; width: 15px; border-width: 2px; transform: rotate(225deg);">
                             </div>
                         </div>
                         <div style="position: relative; left: 10px;">${categorySnapshot.key}</div>
-                        <div id="itemList_${categorySnapshot.key}" onscroll="advScr('${categorySnapshot.key}');" style="font-size: 0px; white-space: nowrap; overflow: auto;">
+                        <div id="itemList_${categorySnapshot.key}" onscroll="advScr('${categorySnapshot.key}');" style="overflow: auto; font-size: 0px; white-space: nowrap;">
                         </div>
                     </div>
                 `;
@@ -539,10 +537,11 @@
                 categorySnapshot.forEach(function (childSnapshot) {
 
                     document.getElementById("itemList_" + categorySnapshot.key).innerHTML += `
-                        <div class="item" onclick="order('${childSnapshot.key}', ${childSnapshot.val()}, '${categorySnapshot.key}');">
-                            ${childSnapshot.key}
-                            <br>
-                            RM ${childSnapshot.val().toFixed(2)}
+                        <div class="item" style="white-space: normal;" onclick="order('${childSnapshot.key}', ${childSnapshot.val()}, '${categorySnapshot.key}');">
+                            <div style="position: relative; transform: translate(-50%, -50%); top: 50%; left: 50%; width: 100%;">
+                                <div>${childSnapshot.key}</div>
+                                <div>RM ${childSnapshot.val().toFixed(2)}</div>
+                            </div>
                         </div>
                     `;
 

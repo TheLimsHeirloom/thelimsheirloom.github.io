@@ -249,6 +249,11 @@
     //refresh order
     function refreshOrder() {
 
+        //If order cart is not empty
+        if (JSON.parse(sessionStorage.getItem("order")).length == 0) {
+            window.location.href = 'main.html';
+        }
+
         //reset Total Price
         totalPrice = 0;
 
@@ -314,7 +319,7 @@
     // https://firebase.google.com/docs/web/setup#available-libraries
 
     // Your web app's Firebase configuration
-        const firebaseConfig = {
+    const firebaseConfig = {
         apiKey: "AIzaSyB8vtiyFaH_-GJhSA8OKZ5s7VTDgodmGdY",
         authDomain: "thelimsheirloom-4eee5.firebaseapp.com",
         databaseURL: "https://thelimsheirloom-4eee5-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -386,35 +391,43 @@
 
             oID = ans;
 
-        }
+        };
     });
 
     submitOrder.addEventListener('click', (e) => {
 
-        //Initialize date and time
-        var currentdate = new Date();
-        var date = currentdate.getFullYear() + "/"
-            + (currentdate.getMonth() + 1) + "/"
-            + currentdate.getDate();
+        //If order cart is empty
+        if (JSON.parse(sessionStorage.getItem("order")).length != 0) {
 
-        var time = ((currentdate.getHours() / 10 >= 1) ? currentdate.getHours() : "0" + currentdate.getHours()) + ":"
-            + ((currentdate.getMinutes() / 10 >= 1) ? currentdate.getMinutes() : "0" + currentdate.getMinutes()) + ":"
-            + ((currentdate.getSeconds() / 10 >= 1) ? currentdate.getSeconds() : "0" + currentdate.getSeconds());
+            //Initialize date and time
+            var currentdate = new Date();
+            var date = currentdate.getFullYear() + "/"
+                + (currentdate.getMonth() + 1) + "/"
+                + currentdate.getDate();
 
-        //Upload order data
-        set(ref(database, 'staffcode/' + sessionStorage.getItem('staffCode') + '/order/' + date + '/' + oID), {
-            orderList: sessionStorage.getItem("order"),
-            time: time,
-            totalPrice: totalPrice
-        })
+            var time = ((currentdate.getHours() / 10 >= 1) ? currentdate.getHours() : "0" + currentdate.getHours()) + ":"
+                + ((currentdate.getMinutes() / 10 >= 1) ? currentdate.getMinutes() : "0" + currentdate.getMinutes()) + ":"
+                + ((currentdate.getSeconds() / 10 >= 1) ? currentdate.getSeconds() : "0" + currentdate.getSeconds());
 
-        //Update last order ID
-        set(ref(database, 'sale/'), {
-            orderCount: oCount
-        })
+            //Upload order data
+            set(ref(database, 'staffcode/' + sessionStorage.getItem('staffCode') + '/order/' + date + '/' + oID), {
+                orderList: sessionStorage.getItem("order"),
+                time: time,
+                totalPrice: totalPrice
+            })
 
-        //Clear current order
-        sessionStorage.setItem("order", JSON.stringify([]));
+            //Update last order ID
+            set(ref(database, 'sale/'), {
+                orderCount: oCount
+            })
+
+            //Pop receipt window and print
+            window.open('../pos/receipt.html', 'MyWindow', 'width=500,height=800');
+
+            //Clear current order
+            sessionStorage.setItem("order", JSON.stringify([]));
+
+        };
 
         //Direct to main page
         window.location.href = "main.html";
