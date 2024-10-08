@@ -20,14 +20,14 @@
 				<div id="datetime"></div>
 			</div>
 			<br>
-			<div style="text-align: left;">Invoice No: 000001</div>
+			<div style="text-align: left;">Invoice No: <label id="no"></label></div>
 			<br>
 			<div id="list" class="grid-container"></div>
             <div style="border-top: 1px solid black; margin-top: 10px; margin-bottom: 10px;"></div>
             <div id="total" class="grid-container"></div>
 			<br>
 			<div style="font-size: 13px;">
-				<div>Thank you for your coming.</div>
+				<div>Thank you for your support.</div>
 				<div>谢谢惠顾。</div>
 			</div>
 			<br>
@@ -35,6 +35,7 @@
 	</div>
 </body>
 <script>
+
 	let text = "Print?\nEither OK or Cancel.";
 	if (confirm(text) == true) {
 		text = "You pressed OK!";
@@ -42,17 +43,22 @@
 	} else {
 		text = "You canceled!";
 	}
+
 	// Get current date and time
 	var now = new Date();
 	var datetime = now.toLocaleString();
 
-	// Insert date and time into HTML
-	document.getElementById("datetime").innerHTML = datetime;
-
     // Retrieve order cart
-    var cart = JSON.parse(sessionStorage.getItem("order"));
-    var totalPrice = 0;
+	var data = (((document.location.href).replace(/%22/gi,"\"").replace(/%20/gi," "))).split("?data=");
+    var cart = JSON.parse(JSON.parse(data[3]).orderList);
 
+	// Insert date and time into HTML
+	document.getElementById("datetime").innerHTML = data[1];
+
+	// Get Invoice number
+	document.getElementById("no").innerHTML = data[2];
+
+	// Get cart items
     for (let index = 0; index < cart.length; index++) {
         const element = cart[index];
         document.getElementById("list").innerHTML += `
@@ -61,11 +67,10 @@
             </div>
             <div style="align-self: flex-end;">${cart[index][1].toFixed(2)}</div>
         `;
-        totalPrice += cart[index][1];
     };
 
     document.getElementById("total").innerHTML += `
-        <div style="grid-column: span 2; text-align: right;">Total:</div><div>${totalPrice.toFixed(2)}</div>
+        <div style="grid-column: span 2; text-align: right;">Total:</div><div>${JSON.parse(data[3]).totalPrice.toFixed(2)}</div>
     `;
 
     // Close the window after 5 seconds
