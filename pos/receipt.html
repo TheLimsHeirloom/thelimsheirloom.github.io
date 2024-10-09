@@ -49,7 +49,8 @@
 	var datetime = now.toLocaleString();
 
     // Retrieve order cart
-	var data = (((document.location.href).replace(/%22/gi,"\"").replace(/%20/gi," "))).split("?data=");
+	const decodedURL = decodeURIComponent(window.location.href);
+	var data = decodedURL.split("?data=");
     var cart = JSON.parse(JSON.parse(data[3]).orderList);
 
 	// Insert date and time into HTML
