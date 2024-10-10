@@ -212,6 +212,24 @@
         start = 1;
     });
 
+    // Staff Status
+    onValue(ref(database, 'staffcode/' + sessionStorage.getItem('staffCode') + '/attendance/' + date), (snapshot) => {
+        if (snapshot.exists()) {
+            //Find unfinish clock-in - Active
+            var end = false;
+            snapshot.forEach(function (childSnapshot) {
+                if (childSnapshot.child("end").val() == false) {
+                    end = true;
+                    document.getElementById("accStatus").className = "stActive detail";
+                }
+            });
+            //If no unfinish clock-in - Unactive
+            if (end == false) {
+                document.getElementById("accStatus").className = "stUnactive detail";
+            }
+        }
+    });
+
 </script>
 
 </html>
