@@ -212,6 +212,12 @@
         start = 1;
     });
 
+    //Auto refresh staff status
+    var currentdate = new Date();
+    var date = currentdate.getFullYear() + "/"
+        + (currentdate.getMonth() + 1) + "/"
+        + currentdate.getDate();
+        
     // Staff Status
     onValue(ref(database, 'staffcode/' + sessionStorage.getItem('staffCode') + '/attendance/' + date), (snapshot) => {
         if (snapshot.exists()) {
